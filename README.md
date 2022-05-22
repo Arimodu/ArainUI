@@ -8,7 +8,7 @@ I aim to implement some advanced features while preserving cross platform compat
 ## State of development
 As of writing this it is not yet possible to even connect to a server, as such I will post updates here. 
 
-You can also follow the development on the [https://trello.com/b/eEwUQwsd](Trello page) 
+You can also follow the development on the [Trello page](https://trello.com/b/eEwUQwsd) 
 
 ## Contributing
 The workload to get this into working order is quite severe, **!!PRs are welcome!!**
