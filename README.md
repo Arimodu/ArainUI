@@ -28,5 +28,8 @@ Unload the head projects which you are not developing for (Tizen, WPF, WPF.Host)
 
 VisualStudio users set intellisense to UWP (This is not preserved during VS restart, keep it in mind, if you see a lot of red poop then check intellisense head)
 
+#### Translating
+If you want to add a translation to your language just message me on discord, I will give you access to the trello and make you a card for the translation progress
+
 # License
 MIT
