@@ -14,11 +14,13 @@
     <_Globbed_Compile Remove="ConnectPage.xaml.cs" />
     <_Globbed_Compile Remove="Converters\BooleanToVisibilityConverter.cs" />
     <_Globbed_Compile Remove="Views\PluginMangerPage.xaml.cs" />
+    <_Globbed_Compile Remove="Views\ServerHubPage.xaml.cs" />
     <_Globbed_Compile Remove="Views\Settings.xaml.cs" />
     <_Globbed_Compile Remove="Views\SettingsPage.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <_Globbled_Page Remove="Views\PluginMangerPage.xaml" />
+    <_Globbled_Page Remove="Views\ServerHubPage.xaml" />
     <_Globbled_Page Remove="Views\Settings.xaml" />
     <_Globbled_Page Remove="Views\SettingsPage.xaml" />
   </ItemGroup>

@@ -6,6 +6,7 @@ using TournamentAssistantShared;
 using TournamentAssistantShared.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Navigation;
 
 namespace ArainUI.Views
 {
@@ -16,11 +17,13 @@ namespace ArainUI.Views
         {
             ScrapedServersData = new ObservableCollection<ServerViewData>();
             InitializeComponent();
+            NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
         }
 
-        private async void Load_Servers_Click(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            LoadServersBtn.Visibility = Visibility.Collapsed;
+            base.OnNavigatedTo(e);
+
             ServerScrapeProgress.Visibility = Visibility.Visible;
 
             Progress<int> progress = new Progress<int>(value =>
@@ -28,16 +31,15 @@ namespace ArainUI.Views
                 ServerScrapeProgress.Value = value;
             });
 
-            await ScrapeServers(progress);
-
-            ServerScrapeProgress.Visibility = Visibility.Collapsed;
-            ServerListViewBorder.Visibility = Visibility.Visible;
+            //Start this as a task and let the UI finish its bussiness
+            ScrapeServers(progress);
         }
 
-        private async void RefreshServerList_Click(object sender, RoutedEventArgs e)
+        private void RefreshServerList_Click(object sender, RoutedEventArgs e)
         {
             ServerListViewBorder.Visibility = Visibility.Collapsed;
             ServerScrapeProgress.IsIndeterminate = true;
+            ServerScrapeProgress.Value = 0;
             ServerScrapeProgress.Visibility = Visibility.Visible;
             ScrapedServersData.Clear();
             ServerAddressBox.Text = string.Empty;
@@ -48,10 +50,7 @@ namespace ArainUI.Views
                 ServerScrapeProgress.Value = value;
             });
 
-            await ScrapeServers(progress);
-
-            ServerScrapeProgress.Visibility = Visibility.Collapsed;
-            ServerListViewBorder.Visibility = Visibility.Visible;
+            ScrapeServers(progress);
         }
 
         private void ServerListView_SelectionChanged(object sender, RoutedEventArgs e)
@@ -60,10 +59,29 @@ namespace ArainUI.Views
 
             //For whatever reason this gets randomly fired when clearing the collection
             //Need to handle null -_-
-            if (selectedServerData == null) return;
-
+            if (selectedServerData == null)
+            {
+                //If we have no server selected and password box is not visible, show password box
+                if (PasswordBox.Visibility == Visibility.Collapsed) PasswordBox.Visibility = Visibility.Visible;
+                return;
+            }
             ServerAddressBox.Text = selectedServerData.Address;
             ServerPortBox.Text = selectedServerData.Port.ToString();
+
+            //If selected server is password protected and passwordbox is not visible, show password box
+            if (selectedServerData.IsPasswordProtected && PasswordBox.Visibility == Visibility.Collapsed)
+            {
+                UserPasswordGrid.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
+                PasswordBox.Visibility = Visibility.Visible;
+            }
+                
+            //If selected server is NOT password protected and password box is visible, hide password box
+            if (!selectedServerData.IsPasswordProtected && PasswordBox.Visibility == Visibility.Visible)
+            {
+                UserPasswordGrid.ColumnDefinitions[1].Width = GridLength.Auto;
+                PasswordBox.Visibility = Visibility.Collapsed;
+            }
+                
         }
 
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
@@ -84,27 +102,27 @@ namespace ArainUI.Views
             //Assuming no password, at this point idk how to deal with that, but lets cross that bridge when we get there
             if ((ServerListView.SelectedItem as ServerViewData).Address.ToLower().Trim() != ServerAddressBox.Text.ToLower().Trim() || (ServerListView.SelectedItem as ServerViewData).Port != portNumber)
             {
-                ConnectToServer(ServerAddressBox.Text, portNumber, string.IsNullOrEmpty(UsernameBox.Text) ? "Coordinator", UsernameBox.Text);
+                ConnectToServer(ServerAddressBox.Text, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "Coordinator" : UsernameBox.Text, PasswordBox.Text);
             }
 
             //If none of the above catch we can safely assume we can use the selected item
-
+            ConnectToServer((ServerListView.SelectedItem as ServerViewData).Address, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "Coordinator" : UsernameBox.Text, PasswordBox.Text);
         }
 
         private void ConnectToServer(string address, int port, string username, string password = null)
         {
-
+            Frame.Navigate(typeof(ServerHubPage), new SystemClient(address, port, username, User.ClientTypes.Coordinator, null, password));
         }
 
         /// <summary>
         /// Scrapes first the masterserver for a known server list, then scrapes all servers as a mesh network
         /// </summary>
-        private async Task ScrapeServers(IProgress<int> progress)
+        private async void ScrapeServers(IProgress<int> progress)
         {
             //Assuming we dont know anything, lets scrape the masterserver first
             var masterServer = new CoreServer
             {
-                Address = "tournamentassistant.net",
+                Address = Constants.MASTER_SERVER,
                 Port = 2052
             };
             var masterState = await HostScraper.ScrapeHost(masterServer, "ArainUI", 0);
@@ -129,6 +147,9 @@ namespace ArainUI.Views
                     ScrapedServersData.Add(new ServerViewData(server, true));
                 }
             }
+
+            ServerScrapeProgress.Visibility = Visibility.Collapsed;
+            ServerListViewBorder.Visibility = Visibility.Visible;
         }
     }
 
