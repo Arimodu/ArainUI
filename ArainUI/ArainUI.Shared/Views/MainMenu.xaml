@@ -10,10 +10,10 @@
 
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button x:Name="ConnectBtn" Content="Connect to server" Click="ConnectBtn_Click" Width="200" Margin="5"/>
-            <Button x:Name="ManageBtn" Content="Manage plugin" Click="ManageBtn_Click" Width="200" Margin="5"/>
-            <Button x:Name="SettingsBtn" Content="Settings" Click="SettingsBtn_Click" Width="200" Margin="5"/>
-            <Button x:Name="ExitBtn" Content="Exit" Click="ExitBtn_Click" Width="200" Margin="5"/>
+            <Button x:Uid="ConnectBtn" Click="ConnectBtn_Click" Width="200" Margin="5"/>
+            <Button x:Uid="ManageBtn" Click="ManageBtn_Click" Width="200" Margin="5"/>
+            <Button x:Uid="SettingsBtn" Click="SettingsBtn_Click" Width="200" Margin="5"/>
+            <Button x:Uid="ExitBtn" Click="ExitBtn_Click" Width="200" Margin="5"/>
         </StackPanel>
     </Grid>
 </Page>

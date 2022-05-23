@@ -120,4 +120,32 @@
   <data name="ApplicationName" xml:space="preserve">
     <value>ArainUI</value>
   </data>
+  <data name="ConnectBtn.Content" xml:space="preserve">
+    <value>Connect to server</value>
+    <comment>Connect to server on Main menu page</comment>
+  </data>
+  <data name="ConnectPagePasswordBox.PlaceholderText" xml:space="preserve">
+    <value>Password</value>
+    <comment>Password box on Connect page</comment>
+  </data>
+  <data name="ConnectPageServerPortBox.PlaceholderText" xml:space="preserve">
+    <value>2052</value>
+    <comment>Port Box on Connect page</comment>
+  </data>
+  <data name="ConnectPageUsernameBox.PlaceholderText" xml:space="preserve">
+    <value>Username</value>
+    <comment>Username box on Connect page</comment>
+  </data>
+  <data name="ExitBtn.Content" xml:space="preserve">
+    <value>Exit</value>
+    <comment>Exit on Main menu page</comment>
+  </data>
+  <data name="ManageBtn.Content" xml:space="preserve">
+    <value>Manage plugin</value>
+    <comment>Manage plugin on Main menu page</comment>
+  </data>
+  <data name="SettingsBtn.Content" xml:space="preserve">
+    <value>Settings</value>
+    <comment>Settings on Main menu page</comment>
+  </data>
 </root>
