@@ -140,6 +140,15 @@
     <value>Exit</value>
     <comment>Exit on Main menu page</comment>
   </data>
+  <data name="HubPageConnectionInfo.ConnectionFailed" xml:space="preserve">
+    <value>Connection could not be established</value>
+  </data>
+  <data name="HubPageConnectionInfo.ConnectionInProgress" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
+  <data name="HubPageConnectionInfo.ConnectionSuccess" xml:space="preserve">
+    <value>Connection success!</value>
+  </data>
   <data name="ManageBtn.Content" xml:space="preserve">
     <value>Manage plugin</value>
     <comment>Manage plugin on Main menu page</comment>

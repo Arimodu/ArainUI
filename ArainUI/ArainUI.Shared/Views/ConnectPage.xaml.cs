@@ -24,6 +24,8 @@ namespace ArainUI.Views
         {
             base.OnNavigatedTo(e);
 
+            if (e.NavigationMode == NavigationMode.Back) return;
+
             ServerScrapeProgress.Visibility = Visibility.Visible;
 
             Progress<int> progress = new Progress<int>(value =>
@@ -100,6 +102,7 @@ namespace ArainUI.Views
 
             //If selected item address is not the same as whats in the address box or selected item port is not the same as whats in the port box, use content of address / port box
             //Assuming no password, at this point idk how to deal with that, but lets cross that bridge when we get there
+            //Well it wasnt that difficult afterall, I just had to sleep on it...
             if ((ServerListView.SelectedItem as ServerViewData).Address.ToLower().Trim() != ServerAddressBox.Text.ToLower().Trim() || (ServerListView.SelectedItem as ServerViewData).Port != portNumber)
             {
                 ConnectToServer(ServerAddressBox.Text, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "Coordinator" : UsernameBox.Text, PasswordBox.Text);
@@ -114,9 +117,6 @@ namespace ArainUI.Views
             Frame.Navigate(typeof(ServerHubPage), new SystemClient(address, port, username, User.ClientTypes.Coordinator, null, password));
         }
 
-        /// <summary>
-        /// Scrapes first the masterserver for a known server list, then scrapes all servers as a mesh network
-        /// </summary>
         private async void ScrapeServers(IProgress<int> progress)
         {
             //Assuming we dont know anything, lets scrape the masterserver first
