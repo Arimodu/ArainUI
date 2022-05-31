@@ -64,7 +64,7 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" x:Name="UsernameBox" x:Uid="ConnectPageUsernameBox" Margin="10 0" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-                    <TextBox Grid.Column="1" x:Name="PasswordBox" x:Uid="ConnectPagePasswordBox" Margin="10 0" MinWidth="100" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
+                    <PasswordBox Grid.Column="1" x:Name="PasswordBox" x:Uid="ConnectPagePasswordBox" Margin="10 0" MinWidth="100" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
                 </Grid>
                 <Button x:Name="ConnectButton" Content="Connect" Margin="5" HorizontalAlignment="Center" Click="ConnectButton_Click"/>
             </StackPanel>

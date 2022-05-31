@@ -6,9 +6,13 @@ I aim to implement some advanced features while preserving cross platform compat
 *Sorry Apple device users, while Uno Platform which I chose for development has support for iOS and OSX I dont ever plan on debugging, releasing or maintaining those versions. I dont own anything apple and hate the company with a burning passion. I will not prevent it if someone comes and releases it for the Apple ecosystem, **but I will not do it myself***
 
 ## State of development
-As of writing this it is not yet possible to even connect to a server, as such I will post updates here. 
+~~As of writing this it is not yet possible to even connect to a server, as such~~ I will post updates here. 
 
-You can also follow the development on the [Trello page](https://trello.com/b/eEwUQwsd) 
+Update: I am starting to get busy with IRL stuff right now, so development will slow down (*not stop, just slow down*). If you have an idea please get in touch with me on discord or through the repo.
+
+You can follow the development on the [Trello page](https://trello.com/b/eEwUQwsd)
+
+I am also sometimes live on [Twitch](https://twitch.tv/arimodu) if you want to chat, ask or suggest some features directly to me. Or you can just come criticise my code ¯\\\_(ツ)\_/¯.
 
 ## Contributing
 The workload to get this into working order is quite severe, **!!PRs are welcome!!**

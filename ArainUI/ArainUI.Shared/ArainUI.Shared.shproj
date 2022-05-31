@@ -13,6 +13,7 @@
   <ItemGroup>
     <_Globbed_Compile Remove="ConnectPage.xaml.cs" />
     <_Globbed_Compile Remove="Converters\BooleanToVisibilityConverter.cs" />
+    <_Globbed_Compile Remove="Converters\SteamIDToImageSourcePFPConverter.cs" />
     <_Globbed_Compile Remove="Views\PluginMangerPage.xaml.cs" />
     <_Globbed_Compile Remove="Views\ServerHubPage.xaml.cs" />
     <_Globbed_Compile Remove="Views\Settings.xaml.cs" />

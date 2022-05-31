@@ -149,6 +149,10 @@
   <data name="HubPageConnectionInfo.ConnectionSuccess" xml:space="preserve">
     <value>Connection success!</value>
   </data>
+  <data name="HubPageConnectionStatusBlock.Text" xml:space="preserve">
+    <value>Connecting...</value>
+    <comment>Default text, I dont know how to bind to a noncanonical property from xaml so this is a duplicate of HubPageConnectionInfo.ConnectionInProgress</comment>
+  </data>
   <data name="ManageBtn.Content" xml:space="preserve">
     <value>Manage plugin</value>
     <comment>Manage plugin on Main menu page</comment>

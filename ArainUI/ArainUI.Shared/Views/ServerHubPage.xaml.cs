@@ -17,13 +17,15 @@ using TournamentAssistantShared.Models;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Resources;
 using System.Collections.ObjectModel;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace ArainUI.Views
 {
     public sealed partial class ServerHubPage : Page
     {
         public ObservableCollection<User> AvailablePlayers { get; private set; } = new ObservableCollection<User>();
-        public ObservableCollection<User> SelectedUsers { get; private set; } = new ObservableCollection<User>();
+        public ObservableCollection<User> AvailableCoordinators { get; private set; } = new ObservableCollection<User>();
+        public ObservableCollection<User> SelectedPlayers { get; private set; } = new ObservableCollection<User>();
         public SystemClient Client { get; private set; }
         public ServerHubPage()
         {
@@ -40,9 +42,47 @@ namespace ArainUI.Views
                 Client.FailedToConnectToServer += Client_FailedToConnectToServer;
                 Client.ServerDisconnected += Client_ServerDisconnected;
 
+                Client.UserConnected += Client_UserConnected;
+                Client.UserDisconnected += Client_UserDisconnected;
+                Client.UserInfoUpdated += Client_UserInfoUpdated;
+
                 Task.Run(Client.Start);
             } 
             base.OnNavigatedTo(e);
+        }
+
+        private Task Client_UserInfoUpdated(User arg)
+        {
+            //throw new NotImplementedException();
+            return Task.CompletedTask;
+        }
+
+        private Task Client_UserDisconnected(User arg)
+        {
+            if (AvailablePlayers.Contains(arg)) AvailablePlayers.Remove(arg);
+            if (SelectedPlayers.Contains(arg)) SelectedPlayers.Remove(arg);
+            return Task.CompletedTask;
+        }
+
+        private Task Client_UserConnected(User user)
+        {
+            switch (user.ClientType)
+            {
+                case User.ClientTypes.Player:
+                    AvailablePlayers.Add(user);
+                    break;
+                case User.ClientTypes.Coordinator:
+                    AvailableCoordinators.Add(user);
+                    break;
+                case User.ClientTypes.TemporaryConnection:
+                    break;
+                case User.ClientTypes.WebsocketConnection:
+                    break;
+                default:
+                    break;
+            }
+
+            return Task.CompletedTask;
         }
 
         private Task Client_ServerDisconnected()
@@ -84,10 +124,15 @@ namespace ArainUI.Views
             }));
         }
 
-        private async Task Client_ConnectedToServer(TournamentAssistantShared.Models.Packets.ConnectResponse arg)
+        private async Task Client_ConnectedToServer(TournamentAssistantShared.Models.Packets.ConnectResponse response)
         {
             await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, new Windows.UI.Core.DispatchedHandler(() =>
             {
+                //Select users where user is player and not in any match, in case no matches are open select all connected users and create a new instance of ObservableCollection
+                AvailablePlayers = new ObservableCollection<User>(response.State.Users.Where((user) => user.ClientType == User.ClientTypes.Player && response.State.Matches.All((match) => !match.AssociatedUsers.Contains(user))));
+
+                AvailableCoordinators = new ObservableCollection<User>(response.State.Users.Where((user) => user.ClientType == User.ClientTypes.Coordinator && response.State.Matches.All((match) => !match.AssociatedUsers.Contains(user))));
+
                 ConnectionProgressBar.IsIndeterminate = false;
                 ConnectionProgressBar.Maximum = 100;
                 ConnectionProgressBar.Value = 0;

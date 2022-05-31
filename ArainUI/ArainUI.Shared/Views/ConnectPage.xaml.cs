@@ -105,11 +105,11 @@ namespace ArainUI.Views
             //Well it wasnt that difficult afterall, I just had to sleep on it...
             if ((ServerListView.SelectedItem as ServerViewData).Address.ToLower().Trim() != ServerAddressBox.Text.ToLower().Trim() || (ServerListView.SelectedItem as ServerViewData).Port != portNumber)
             {
-                ConnectToServer(ServerAddressBox.Text, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "Coordinator" : UsernameBox.Text, PasswordBox.Text);
+                ConnectToServer(ServerAddressBox.Text, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "Coordinator" : UsernameBox.Text, PasswordBox.Password);
             }
 
             //If none of the above catch we can safely assume we can use the selected item
-            ConnectToServer((ServerListView.SelectedItem as ServerViewData).Address, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "Coordinator" : UsernameBox.Text, PasswordBox.Text);
+            ConnectToServer((ServerListView.SelectedItem as ServerViewData).Address, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "Coordinator" : UsernameBox.Text, PasswordBox.Password);
         }
 
         private void ConnectToServer(string address, int port, string username, string password = null)
