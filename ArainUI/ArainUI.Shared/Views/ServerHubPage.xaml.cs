@@ -51,43 +51,51 @@ namespace ArainUI.Views
             base.OnNavigatedTo(e);
         }
 
-        private Task Client_UserInfoUpdated(User arg)
+        private async Task Client_UserInfoUpdated(User user)
         {
-            //throw new NotImplementedException();
-            return Task.CompletedTask;
-        }
-
-        private Task Client_UserDisconnected(User arg)
-        {
-            if (AvailablePlayers.Contains(arg)) AvailablePlayers.Remove(arg);
-            if (SelectedPlayers.Contains(arg)) SelectedPlayers.Remove(arg);
-            return Task.CompletedTask;
-        }
-
-        private Task Client_UserConnected(User user)
-        {
-            switch (user.ClientType)
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, new Windows.UI.Core.DispatchedHandler(() =>
             {
-                case User.ClientTypes.Player:
-                    AvailablePlayers.Add(user);
-                    break;
-                case User.ClientTypes.Coordinator:
-                    AvailableCoordinators.Add(user);
-                    break;
-                case User.ClientTypes.TemporaryConnection:
-                    break;
-                case User.ClientTypes.WebsocketConnection:
-                    break;
-                default:
-                    break;
-            }
+                if (AvailablePlayers.Any((player) => player.Id == user.Id)) AvailablePlayers[AvailablePlayers.IndexOf(user)] = user;
+                if (SelectedPlayers.Any((player) => player.Id == user.Id)) SelectedPlayers[SelectedPlayers.IndexOf(user)] = user;
+                if (AvailableCoordinators.Any((coordinator) => coordinator.Id == user.Id)) AvailableCoordinators[AvailableCoordinators.IndexOf(user)] = user;
+            }));
+        }
 
-            return Task.CompletedTask;
+        private async Task Client_UserDisconnected(User user)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, new Windows.UI.Core.DispatchedHandler(() =>
+            {
+                if (AvailablePlayers.Any((player) => player.Id == user.Id)) AvailablePlayers.Remove(user);
+                if (SelectedPlayers.Any((player) => player.Id == user.Id)) SelectedPlayers.Remove(user);
+                if (AvailableCoordinators.Any((coordinator) => coordinator.Id == user.Id)) AvailableCoordinators.Remove(user);
+            }));
+        }
+
+        private async Task Client_UserConnected(User user)
+        {
+            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, new Windows.UI.Core.DispatchedHandler(() =>
+            {
+                switch (user.ClientType)
+                {
+                    case User.ClientTypes.Player:
+                        AvailablePlayers.Add(user);
+                        break;
+                    case User.ClientTypes.Coordinator:
+                        AvailableCoordinators.Add(user);
+                        break;
+                    case User.ClientTypes.TemporaryConnection:
+                        break;
+                    case User.ClientTypes.WebsocketConnection:
+                        break;
+                    default:
+                        break;
+                }
+            }));
         }
 
         private Task Client_ServerDisconnected()
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         private async Task Client_FailedToConnectToServer(TournamentAssistantShared.Models.Packets.ConnectResponse arg)
@@ -158,6 +166,20 @@ namespace ArainUI.Views
 
                 ResourceLoader resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
                 ConnectionStatusBlock.Text = resourceLoader.GetString("HubPageConnectionInfo/ConnectionSuccess");
+
+                //Select users where user is player and not in any match, in case no matches are open select all connected users
+                //Also check if player hasn't been already added by another event
+                foreach (var player in response.State.Users.Where((user) => user.ClientType == User.ClientTypes.Player && response.State.Matches.All((match) => !match.AssociatedUsers.Contains(user))))
+                {
+                    if (AvailablePlayers.Any((user) => user.Id == player.Id)) continue;
+                    AvailablePlayers.Add(player);
+                }
+
+                foreach (var coordinator in response.State.Users.Where((user) => user.ClientType == User.ClientTypes.Coordinator))
+                {
+                    if (AvailableCoordinators.Any((user) => user.Id == coordinator.Id)) continue;
+                    AvailableCoordinators.Add(coordinator);
+                }
             }));
         }
     }

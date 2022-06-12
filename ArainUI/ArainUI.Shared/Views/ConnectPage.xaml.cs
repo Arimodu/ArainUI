@@ -7,18 +7,31 @@ using TournamentAssistantShared.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
 
 namespace ArainUI.Views
 {
     public sealed partial class ConnectPage : Page
     {
         public ObservableCollection<ServerViewData> ScrapedServersData { get; private set; }
+
+        private ICommand ConnectBtnCommand { get; set; }
+
         public ConnectPage()
         {
             ScrapedServersData = new ObservableCollection<ServerViewData>();
             InitializeComponent();
             NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+            ConnectBtnCommand = new RelayCommand(ConnectToServer, CanConnectToServer, true);
         }
+
+        #region CanExecute
+        private bool CanConnectToServer()
+        {
+            return !string.IsNullOrWhiteSpace(ServerAddressBox.Text) && !string.IsNullOrWhiteSpace(ServerPortBox.Text);
+        } 
+        #endregion
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -86,7 +99,7 @@ namespace ArainUI.Views
                 
         }
 
-        private void ConnectButton_Click(object sender, RoutedEventArgs e)
+        private void ConnectToServer()
         {
             //If either address or port box is empty and server list selection is null -> play animation <This part not implemented yet> and return
             if ((string.IsNullOrEmpty(ServerAddressBox.Text) || string.IsNullOrEmpty(ServerPortBox.Text)) && ServerListView.SelectedItem is null)
@@ -105,11 +118,11 @@ namespace ArainUI.Views
             //Well it wasnt that difficult afterall, I just had to sleep on it...
             if ((ServerListView.SelectedItem as ServerViewData).Address.ToLower().Trim() != ServerAddressBox.Text.ToLower().Trim() || (ServerListView.SelectedItem as ServerViewData).Port != portNumber)
             {
-                ConnectToServer(ServerAddressBox.Text, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "Coordinator" : UsernameBox.Text, PasswordBox.Password);
+                ConnectToServer(ServerAddressBox.Text, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "ArainUI" : UsernameBox.Text, PasswordBox.Password);
             }
 
             //If none of the above catch we can safely assume we can use the selected item
-            ConnectToServer((ServerListView.SelectedItem as ServerViewData).Address, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "Coordinator" : UsernameBox.Text, PasswordBox.Password);
+            ConnectToServer((ServerListView.SelectedItem as ServerViewData).Address, portNumber, string.IsNullOrEmpty(UsernameBox.Text.Trim()) ? "ArainUI" : UsernameBox.Text, PasswordBox.Password);
         }
 
         private void ConnectToServer(string address, int port, string username, string password = null)

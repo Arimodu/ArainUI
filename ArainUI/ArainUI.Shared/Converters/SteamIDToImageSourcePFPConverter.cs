@@ -11,10 +11,8 @@ namespace ArainUI.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (Uri.TryCreate($"https://new.scoresaber.com/api/static/avatars/{value}.jpg", UriKind.RelativeOrAbsolute, out Uri uri)) return null;
-            var img = new Image();
-            img.Source = new BitmapImage(uri);
-            return new Image();
+            if (!Uri.TryCreate($"https://new.scoresaber.com/api/static/avatars/{value}.jpg", UriKind.RelativeOrAbsolute, out Uri uri)) return null;
+            return new BitmapImage(uri);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

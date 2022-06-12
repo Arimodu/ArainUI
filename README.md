@@ -26,6 +26,19 @@ Uno platform environment and templates installed
 #### Project setup
 To start contributing clone this repo as well as the master branch of [Moons repo](https://github.com/MatrikMoon/TournamentAssistant), then just add the shared project from Moons repo to the soulution.
 
+*Note that if you put moons repo clone into the same directory as ArainUI clone the project will be loaded automatically from the relative path in the soulution*
+
+I recommend setup somewhat like this:
+``` 
+x:\xxx\SomeFolder\ArainUI\
+x:\xxx\SomeFolder\TournamentAssistant\
+```
+If you have the project setup differently, especially so when the path
+`..\TournamentAssistant\`
+from the ArainUI folder is invalid (e.g. putting it to different folders) I ask that you do **not** include your soulution file in your PR
+
+*Skip next step if relative path above works*
+
 Add TAShared as a dependency to each of the heads
 
 Unload the head projects which you are not developing for (Tizen, WPF, WPF.Host)
