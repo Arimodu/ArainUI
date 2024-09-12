@@ -8,7 +8,9 @@ I aim to implement some advanced features while preserving cross platform compat
 ## State of development
 ~~As of writing this it is not yet possible to even connect to a server, as such~~ I will post updates here. 
 
-Update: I am starting to get busy with IRL stuff right now, so development will slow down (*not stop, just slow down*). If you have an idea please get in touch with me on discord or through the repo.
+~~Update: I am starting to get busy with IRL stuff right now, so development will slow down (*not stop, just slow down*). If you have an idea please get in touch with me on discord or through the repo.~~
+
+12th September 2024: I am esentially stepping away from everything beatsaber, this project has been dead for a few years now, so I am archiving it. Originally I was waiting for Moon to implement an idea of a "Protocol" version, but development on his side is slow and I got burned out of the game a long time ago. I might come back to this project one day, but for now, this is getting archived.
 
 You can follow the development on the [Trello page](https://trello.com/b/eEwUQwsd)
 
